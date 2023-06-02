@@ -1,0 +1,111 @@
+﻿@using System.Security.Claims
+@model SearchModel
+
+@{
+    ViewData["Title"] = "Catalog";
+}
+
+<h1>Каталог персонажей StarWars</h1>
+
+@if (TempData["SM"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SM"]
+    </div>
+}
+<hr style="height: 3px"/>
+<br />
+
+<form asp-action="Search" asp-controller="Home"  method="post" data-ajax="true" data-ajax-update="#result">
+    <div class="container">
+    <div class="row row-cols-4">
+        <div class="col-7">
+            <div class="row">
+                <div class="col-2">
+                    <b>Дата рождения</b>
+                </div>
+                <div class="col" style="margin-top: 10px">
+                    <div class="row">
+                            <div class="col-1"><b>c</b></div>
+                        <div class="col-3" >
+                                @Html.TextBoxFor(model => model.BirthdayFrom, new { type = "number", @style="width: 100%"})
+                        </div>
+                            <div class="col-1"><b>по</b></div>
+                        <div class="col-3" >
+                                @Html.TextBoxFor(model => model.BirthdayTo, new { type = "number", @style="width: 100%"})
+                        </div>
+                        <div class="col-2">
+                            <p style="margin-left: 0px">
+                                <b>ДБЯ</b>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-2">
+                    <b>Фильмы</b>
+                </div>
+                <div class="col">
+                        <div id="example">
+                        @Html.ListBoxFor(model => model.Films, ViewBag.Films as SelectList, new { @style="width: 100%;", id="multiselect", multiple="multiple"})
+                        </div>
+                    </div>
+            </div>
+        </div>
+  
+        <div class="col-5">
+            <br />
+                <div class="row">
+                    <div class="col-2">
+                        <b>Планета</b>
+                    </div>
+                    <div class="col">
+                        @Html.DropDownListFor(model => model.Planet, new SelectList(ViewBag.Planets, "Text", "Value"), "Выберите планету", new { @style="width: 100%;", @class = "btn btn-secondary dropdown-toggle"})
+                    </div>
+                </div>
+            <br />
+            
+            <br />
+            <div class="row">
+                <div class="col-2">
+                    <b>Пол</b>
+                </div>
+                <div class="col">
+                    @Html.DropDownListFor(model => model.Sexes, ViewBag.Sexes as SelectList, "Выберите пол", new { @style="width: 100%;", @class = "btn btn-secondary dropdown-toggle"})
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    </div>
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <div class="form-group">
+                <input name="button" type="submit" value="Поиск" class="btn btn-secondary" style="margin-right: 13px"/>
+            </div>
+        </div>
+</form>
+
+<hr style="height: 3px" />
+<br />
+
+<div id="result">
+    @await Html.PartialAsync("Search", Model)
+</div>
+                        
+@section Scripts{
+           <script type="text/javascript">
+            var mySelect = new MSFmultiSelect(
+                document.querySelector('#multiselect'),
+                {
+                    appendTo: '#example',
+                     width:516,
+                     height:130,
+                    selectAll: true,
+                    placeholder: 'Выберите фильмы'
+                }
+            );
+        </script>                      
+}

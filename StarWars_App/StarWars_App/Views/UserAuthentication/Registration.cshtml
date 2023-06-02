@@ -1,0 +1,100 @@
+﻿@model StarWars_App.Models.DTO.RegistrationModel
+@{
+    Layout = null;
+}
+
+<style>
+    input[type=text], input[type=password] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+
+    button,a {
+        background-color: #f1f1f1;
+        color: black;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 50%;
+    }
+
+    .container {
+        padding: 16px;
+        border: 3px solid #f1f1f1;
+        width: 25%;
+        margin: auto;
+        margin-top: 10%;
+    }
+
+    .msg {
+        padding: 0px;
+        background-color: lightcyan;
+        color: red;
+    }
+</style>
+
+@Html.ValidationSummary()
+
+
+<div class="container">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["msg"]
+        </div>
+    }
+    <div class="row">
+        <div class="col-md-6 center-block">
+            <h3>Регистрация</h3>
+            <form asp-action="Registration" method="post">
+                <div class="form-group">
+                    <label>Имя*</label>
+                    <input type="text" class="form-control" asp-for="FirstName"/>
+                    <span class="text-danger"  asp-validation-for="FirstName"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Фамилия*</label>
+                    <input type="text" class="form-control" asp-for="LastName" />
+                    <span class="text-danger" asp-validation-for="LastName"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="text" class="form-control" asp-for="Email" />
+                    <span class="text-danger" asp-validation-for="Email"></span>
+
+                </div>
+
+                <div class="form-group">
+                    <label>Ник</label>
+                    <input type="text" class="form-control" asp-for="Username" />
+                    <span class="text-danger" asp-validation-for="Username"></span>
+
+                </div>
+
+                <div class="form-group">
+                    <label>Пароль (например: Jhon@123)</label>
+                    <input type="password" class="form-control" asp-for="Password" />
+                    <span class="text-danger" asp-validation-for="Password"></span>
+
+                </div>
+
+                <div class="form-group">
+                    <label>Повторить пароль</label>
+                    <input type="password" class="form-control" asp-for="PasswordConfirm" />
+                    <span class="text-danger" asp-validation-for="PasswordConfirm"></span>
+
+                </div>
+
+                <button type="submit" class="btn btn-secondary">Регистрация</button>
+                <a class="btn btn-outline-secondary" href="/UserAuthentication/Login">Войти</a>
+            </form>
+        </div>
+    </div>
+</div>
