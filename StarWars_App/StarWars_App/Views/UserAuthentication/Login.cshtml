@@ -1,0 +1,88 @@
+﻿@model StarWars_App.Models.DTO.LoginModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>login</title>
+        
+<style>
+
+form {
+  border: 3px solid #f1f1f1;
+  width:25%;
+  margin:auto;
+  margin-top:10%;
+}
+
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #f1f1f1;
+  color: black;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 50%;
+}
+
+.container {
+  padding: 16px;
+}
+
+.msg{
+  padding: 0px;
+  background-color: lightcyan;
+}
+
+.err{
+    color:red;
+}
+</style>
+ 
+</head>
+<body>
+
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["msg"]
+        </div>
+    }
+
+<form asp-action="Login" method="post">
+  
+  <div class="container">
+    <label asp-for="Username"><b>Ник</b></label>
+    <input type="text" asp-for="Username" placeholder="Введите свой Ник">
+            <div class="msg">
+            <span class="err" asp-validation-for="Username"></span>
+            </div>
+
+            
+
+   <label asp-for="Password"><b>Пароль</b></label>
+   <input  type="password" asp-for="Password" placeholder="Введите пароль">
+            <div class="msg">
+            <span asp-validation-for="Password" class="err"></span>
+            </div>
+
+  <button type="submit" class="btn btn-secondary">Войти</button>
+  <a class="btn btn-outline-secondary" href="/UserAuthentication/Registration" style="width: 50%">Зарегистрироваться</a>
+  </div>
+</form>
+
+</body>
+</html>
