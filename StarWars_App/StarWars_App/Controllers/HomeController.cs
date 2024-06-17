@@ -6,6 +6,7 @@ using StarWars_App.Data;
 using StarWars_App.Models;
 using StarWars_App.Models.DTO;
 using StarWars_App.Models.ViewModels;
+using StarWars_App.Services.CharacterServices;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
@@ -17,17 +18,21 @@ public class HomeController : Controller
 {
     private readonly ApplicationContext db;
 
-    public HomeController(ApplicationContext db)
+    private readonly ICharacterProvider _characterProvider;
+
+    public HomeController(ApplicationContext db, ICharacterProvider characterProvider)
     {
         this.db = db;
+        this._characterProvider = characterProvider;
     }
 
     // GET
-    public ActionResult Index()
+    [HttpGet]
+    public async Task<ActionResult> Index()
     {
-        SearchModel model = new SearchModel();
+        SearchModel model = new();
 
-        model.Characters = db.Characters.ToArray().OrderBy(x => x.Name).Select(x => new CharacterVM(x)).ToList();
+        model.Characters = (await _characterProvider.GetAllCharactersAsync())?.OrderBy(x => x.Name).Select(x => new CharacterVM(x)).ToList();
 
         ViewBag.Films = db.Films.ToArray().Select(o => new SelectListItem
         {
@@ -51,9 +56,9 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public ActionResult Search(SearchModel model)
+    public async Task<ActionResult> Search(SearchModel model)
     {
-        model.Characters = db.Characters.ToArray().OrderBy(x => x.Name).Select(x => new CharacterVM(x)).ToList();
+        model.Characters = (await _characterProvider.GetAllCharactersAsync())?.OrderBy(x => x.Name).Select(x => new CharacterVM(x)).ToList();
 
         var serchCharacters = new List<CharacterVM>();
 
@@ -83,6 +88,7 @@ public class HomeController : Controller
     }
 
     // GET
+    [HttpGet]
     public ActionResult AddCharacter()
     {
         var modelCharacter = new CharacterVM();
@@ -157,10 +163,11 @@ public class HomeController : Controller
     }
 
     // GET
-    public ActionResult EditCharacter(int id)
+    [HttpGet]
+    public async Task<ActionResult> EditCharacter(int id)
     {
         CharacterVM? modelCharacter;
-        Character? character = db.Characters?.Find(id);
+        Character? character = await _characterProvider.GetCharacterAsync(id);
 
         if (character?.UserIdCreate == User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value)
         {
@@ -234,6 +241,7 @@ public class HomeController : Controller
     }
 
     // GET
+    [HttpGet]
     public async Task<ActionResult> DeleteCharacter(int id)
     {
         var character = db.Characters.Find(id);
@@ -261,6 +269,7 @@ public class HomeController : Controller
     }
 
     // GET
+    [HttpGet]
     public ActionResult CharacterInfo(int id)
     {
         try

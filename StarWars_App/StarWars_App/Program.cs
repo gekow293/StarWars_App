@@ -5,6 +5,7 @@ using StarWars_App.Data;
 using StarWars_App.Models.Domain;
 using StarWars_App.Repositories.Abstract;
 using StarWars_App.Repositories.Implementation;
+using StarWars_App.Services.CharacterServices;
 using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +22,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 builder.Services.ConfigureApplicationCookie(options => options.LoginPath = "/UserAuthentication/Login");
 
 builder.Services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
+
+builder.Services.AddTransient<ICharacterProvider, CharacterProvider>();
+
+builder.Services.AddTransient<ApplicationContext>();
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
